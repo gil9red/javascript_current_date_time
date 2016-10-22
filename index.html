@@ -23,6 +23,7 @@
                 color: rgb(120, 141, 188);
             }
             
+            
             #calendar {
                 width: 100%;
                 font: monospace;
@@ -30,15 +31,16 @@
                 font-size: 15px;
                 text-align: center;
             }
+            
             #calendar thead tr:last-child {
-                font-size: small;
                 color: rgb(85, 85, 85);
             }
             #calendar thead tr:nth-child(1) td:nth-child(2) {
                 color: rgb(50, 50, 50);
             }
-            #calendar tbody td {
+            #calendar tbody td, thead th {
                 color: rgb(44, 86, 122);
+                border-bottom: 1px solid black; /* Bottom line */
             }
             #calendar tbody td:nth-child(n+6), #calendar .holiday {
                 color: rgb(231, 140, 92);
@@ -51,6 +53,7 @@
             #calendar tbody td.other {
                 color: gray;
             }
+            
         </style>
     </head>
     <body onload="time_now()">
@@ -237,7 +240,9 @@
             
             <br>
             <div id="MyCalendar">
-                <table id="calendar">
+                <!-- cellspacing="0" убирает расстояние между ячейками, тогда линий под ячейками
+                будут видны без разрывов -->
+                <table id="calendar" cellspacing="0">
                     <thead>
                     </thead>
                     <tbody>
