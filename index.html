@@ -22,10 +22,82 @@
                 font-size: 150%;
                 color: rgb(120, 141, 188);
             }
+            
+            #calendar {
+                width: 100%;
+                font: monospace;
+                line-height: 1.2em;
+                font-size: 15px;
+                text-align: center;
+            }
+            #calendar thead tr:last-child {
+                font-size: small;
+                color: rgb(85, 85, 85);
+            }
+            #calendar thead tr:nth-child(1) td:nth-child(2) {
+                color: rgb(50, 50, 50);
+            }
+            #calendar thead tr:nth-child(1) td:nth-child(1):hover, #calendar thead tr:nth-child(1) td:nth-child(3):hover {
+                cursor: pointer;
+            }
+            #calendar tbody td {
+                color: rgb(44, 86, 122);
+            }
+            #calendar tbody td:nth-child(n+6), #calendar .holiday {
+                color: rgb(231, 140, 92);
+            }
+            #calendar tbody td.today {
+                background: rgb(220, 0, 0);
+                color: #fff;
+            }
         </style>
     </head>
     <body onload="time_now()">
         <script>
+            function Calendar(id, year, month) {
+                var Dlast = new Date(year, month + 1, 0).getDate(); // последний день месяца
+                var D = new Date(year, month, Dlast); 
+                var DNlast = new Date(D.getFullYear(), D.getMonth(), Dlast).getDay();  // день недели последнего дня месяца
+                var DNfirst = new Date(D.getFullYear(), D.getMonth(), 1).getDay(); // день недели первого дня месяца
+                
+                var calendar = '<tr>';
+                
+                // пустые клетки до первого дня текущего месяца
+                if (DNfirst != 0) {
+                    for (var i = 1; i < DNfirst; i++) {
+                        calendar += '<td>';
+                    }
+                } else {
+                    // если первый день месяца выпадает на воскресенье, то требуется 7 пустых клеток 
+                    for (var i = 0; i < 6; i++) {
+                        calendar += '<td>';
+                    }
+                }
+                
+                // дни месяца
+                for (var i = 1; i <= Dlast; i++) {
+                    if (i == new Date().getDate() && D.getFullYear() == new Date().getFullYear() && D.getMonth() == new Date().getMonth()) {
+                        // сегодняшней дате можно задать стиль CSS
+                        calendar += '<td class="today">' + i;
+                    } else {
+                        calendar += '<td>' + i;
+                    }
+                    
+                    // если день выпадает на воскресенье, то перевод строки
+                    if (new Date(D.getFullYear(), D.getMonth(), i).getDay() == 0) {
+                        calendar += '<tr>';
+                    }
+                }
+                
+                // пустые клетки после последнего дня месяца
+                for (var i = DNlast; i < 7; i++) {
+                    calendar += '<td>&nbsp;';
+                }
+                document.querySelector('#' + id + ' tbody').innerHTML = calendar;
+                document.querySelector('#' + id + ' thead td:nth-child(2)').dataset.month = D.getMonth();
+                document.querySelector('#' + id + ' thead td:nth-child(2)').dataset.year = D.getFullYear();
+            }
+        
             function time_now() {
                 var date = new Date();
 
@@ -55,6 +127,8 @@
                 document.getElementById('MyTime').innerHTML = textTime;
                 document.getElementById('MyDate').innerHTML = textDate;
                 
+                Calendar("calendar", date.getFullYear(), date.getMonth());
+                
                 setTimeout(time_now, 1000);     
             }  
         </script>
@@ -62,6 +136,15 @@
         <div class="center">
             <div id="MyTime"></div>
             <div id="MyDate"></div>
+            
+            <br>
+            <div id="MyCalendar">
+                <table id="calendar">
+                    <thead>
+                        <tr><td>Mon<td>Tue<td>Wed<td>Thu<td>Fri<td>Sat<td>Sun
+                    <tbody>
+                </table>
+            </div>
         </div>
     </body>
 </html>
