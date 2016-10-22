@@ -1,0 +1,2 @@
+# javascript_current_date_time
+javascript_current_date_time
