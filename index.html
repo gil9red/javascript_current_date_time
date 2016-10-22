@@ -37,23 +37,25 @@
             #calendar thead tr:nth-child(1) td:nth-child(2) {
                 color: rgb(50, 50, 50);
             }
-            #calendar thead tr:nth-child(1) td:nth-child(1):hover, #calendar thead tr:nth-child(1) td:nth-child(3):hover {
-                cursor: pointer;
-            }
             #calendar tbody td {
                 color: rgb(44, 86, 122);
             }
             #calendar tbody td:nth-child(n+6), #calendar .holiday {
                 color: rgb(231, 140, 92);
             }
+            
             #calendar tbody td.today {
                 background: rgb(220, 0, 0);
                 color: #fff;
+            }
+            #calendar tbody td.other {
+                color: gray;
             }
         </style>
     </head>
     <body onload="time_now()">
         <script>
+        /*
             function Calendar(id, year, month) {
                 var Dlast = new Date(year, month + 1, 0).getDate(); // последний день месяца
                 var D = new Date(year, month, Dlast); 
@@ -94,12 +96,96 @@
                     calendar += '<td>&nbsp;';
                 }
                 document.querySelector('#' + id + ' tbody').innerHTML = calendar;
-                document.querySelector('#' + id + ' thead td:nth-child(2)').dataset.month = D.getMonth();
-                document.querySelector('#' + id + ' thead td:nth-child(2)').dataset.year = D.getFullYear();
+            }
+        */
+        
+            function Calendar(id, date) {
+                var year = date.getFullYear();
+                var month = date.getMonth();
+            
+                // Последний день месяца
+                var Dlast = new Date(year, month + 1, 0).getDate();
+                var D = new Date(year, month, Dlast); 
+                
+                // День недели последнего дня месяца
+                var DNlast = new Date(D.getFullYear(), D.getMonth(), Dlast).getDay();
+                
+                // День недели первого дня месяца
+                var DNfirst = new Date(D.getFullYear(), D.getMonth(), 1).getDay();
+                
+                // TODO: не совсем правильно работает, если первый день месяца -- понедельник
+                // нужно чтобы первой строкой были предыдущие дни, иначе последняя строка таблицы
+                // полностью заполнена днями следующего месяца
+                
+                // Для контроля того, что строк календаря с датами будет 6 штук
+                var rowNumber = 6 - 1; // - 1 т.к. первый tr уже есть
+                var calendar = '<tr>';
+                
+                // Если первый день месяца выпадает на воскресенье
+                // Все из-за того, что воскресенье 0, а не 7
+                var firstDay = DNfirst;
+                if (DNfirst == 0) {
+                    firstDay = 7;
+                }
+                
+                // Добавление дней следующего месяца
+                for (var i = 1; i < firstDay; i++) {
+                    // Если в Date в дне указывать 0, то получаем последний день предыдущего
+                    // месяца, соответственно, если указывать -1, то предпоследний день предыдущего
+                    // месяца и т.д.    
+                    var day = new Date(year, month, i - firstDay + 1).getDate();
+                    calendar += '<td class="other">' + day + '</td>';
+                }
+                
+                // Дни месяца
+                for (var i = 1; i <= Dlast; i++) {
+                    var td = "<td";
+                    
+                    // Выделение текущего дня
+                    if (i == date.getDate()) {
+                        td += ' class="today"'
+                    }
+                    td += ">" + i + '</td>';
+                    
+                    calendar += td;
+                    
+                    // Если день выпадает на воскресенье, то перевод строки
+                    if (new Date(D.getFullYear(), D.getMonth(), i).getDay() == 0) {
+                        calendar += '</tr><tr>';
+                        rowNumber--;
+                    }
+                }
+
+                // Добавление дней следующего месяца
+                var nextMonthDay = 1;
+                for (var i = DNlast; i < 7; i++) {
+                    var day = new Date(year, month + 1, nextMonthDay).getDate();
+                    calendar += '<td class="other">' + day + '</td>';
+                    
+                    nextMonthDay++;
+                }
+                calendar += "</tr>";
+                
+                // Дозаполнеие таблицы до rowNumber строк
+                for (var i = 0; i < rowNumber; i++) {
+                    calendar += "<tr>";
+                
+                    for (var j = 0; j < 7; j++) {
+                        var day = new Date(year, month + 1, nextMonthDay).getDate();
+                        calendar += '<td class="other">' + day + '</td>';
+                        
+                        nextMonthDay++;
+                    }
+                    
+                    calendar += "</tr>";
+                }
+                                
+                document.querySelector('#' + id + ' tbody').innerHTML = calendar;
             }
         
             function time_now() {
                 var date = new Date();
+                //date = new Date(2016, 12, 01);
 
                 //var daysOfWeek = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
                 var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -127,9 +213,11 @@
                 document.getElementById('MyTime').innerHTML = textTime;
                 document.getElementById('MyDate').innerHTML = textDate;
                 
-                Calendar("calendar", date.getFullYear(), date.getMonth());
+                //Calendar("calendar", date.getFullYear(), date.getMonth());
                 
-                setTimeout(time_now, 1000);     
+                Calendar("calendar", date);
+                
+                //setTimeout(time_now, 1000);     
             }  
         </script>
         
@@ -141,8 +229,11 @@
             <div id="MyCalendar">
                 <table id="calendar">
                     <thead>
-                        <tr><td>Mon<td>Tue<td>Wed<td>Thu<td>Fri<td>Sat<td>Sun
+                        <tr><td>Mon</td><td>Tue</td><td>Wed</td><td>Thu</td><td>Fri</td><td>Sat</td><td>Sun</td></tr>
+                        <!--<tr><td>Пн</td><td>Вт</td><td>Ср</td><td>Чт</td><td>Пт</td><td>Сб</td><td>Вс</td></tr>-->
+                    </thead>
                     <tbody>
+                    </tbody>
                 </table>
             </div>
         </div>
