@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            _body {
+                height: 350px;
+                width: 350px;
+            }
+            .nowTime_datetime {
+                height: 60px;
+                margin: 0 auto;
+                font-family: Arial;
+                font-size: 250%;
+            }
+        </style>
+    </head>
+    <body onload="time_now()">
+        <script>
+            function time_now() {
+                var date = new Date();
+                
+                var options = {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  weekday: 'long',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  second: 'numeric'
+                };
+                
+                document.getElementById('nowTime').innerHTML = date.toLocaleString("ru", options);
+                document.getElementById('nowTime2').innerHTML = date.toLocaleString("en-US", options);
+                
+                var daysOfWeek = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+                var month = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+                
+                var hours = date.getHours();
+                if (hours < 10) {
+                    hours = "0" + hours;           
+                }
+                
+                var minutes = date.getMinutes();
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
+                }
+                
+                var seconds = date.getSeconds();
+                if (seconds < 10) {
+                    seconds = "0" + seconds;
+                }
+                
+                var text = date.getDate() + " " + month[date.getMonth()] + " " + date.getFullYear() + " г." 
+                    + ", " + hours + ":" + minutes + ":" + seconds 
+                    + ", " + daysOfWeek[date.getDay()];
+                document.getElementById('nowTime3').innerHTML = text;
+                
+                setTimeout(time_now, 1000);     
+            }  
+        </script>
+        
+        <div>
+            <div id="nowTime" class="nowTime_datetime"></div>
+            <div id="nowTime2" class="nowTime_datetime"></div>
+            <br>
+            <div id="nowTime3" class="nowTime_datetime"></div>
+        </div>
+    </body>
+</html>
