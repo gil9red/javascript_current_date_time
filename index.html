@@ -2,15 +2,31 @@
     <head>
         <meta charset="utf-8">
         <style>
-            _body {
+            body {
                 height: 350px;
                 width: 350px;
             }
-            .nowTime_datetime {
+            ._nowTime_datetime {
                 height: 60px;
                 margin: 0 auto;
                 font-family: Arial;
                 font-size: 250%;
+            }
+            
+            .center {
+                text-align: center;
+            }
+            
+            #MyTime {
+                font-family: Arial;
+                font-size: 270%;
+                color: rgb(67, 144, 226);
+            }
+            
+            #MyDate {
+                font-family: Arial;
+                font-size: 150%;
+                color: rgb(120, 141, 188);
             }
         </style>
     </head>
@@ -18,23 +34,13 @@
         <script>
             function time_now() {
                 var date = new Date();
+
+                //var daysOfWeek = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+                var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                 
-                var options = {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  weekday: 'long',
-                  hour: 'numeric',
-                  minute: 'numeric',
-                  second: 'numeric'
-                };
-                
-                document.getElementById('nowTime').innerHTML = date.toLocaleString("ru", options);
-                document.getElementById('nowTime2').innerHTML = date.toLocaleString("en-US", options);
-                
-                var daysOfWeek = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
-                var month = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
-                
+                //var month = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+                var month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
                 var hours = date.getHours();
                 if (hours < 10) {
                     hours = "0" + hours;           
@@ -50,20 +56,18 @@
                     seconds = "0" + seconds;
                 }
                 
-                var text = date.getDate() + " " + month[date.getMonth()] + " " + date.getFullYear() + " г." 
-                    + ", " + hours + ":" + minutes + ":" + seconds 
-                    + ", " + daysOfWeek[date.getDay()];
-                document.getElementById('nowTime3').innerHTML = text;
+                var textTime = hours + ":" + minutes + ":" + seconds;
+                var textDate = daysOfWeek[date.getDay()] + ", " + date.getDate() + " " + month[date.getMonth()].toLowerCase() + ", " + date.getFullYear();
+                document.getElementById('MyTime').innerHTML = textTime;
+                document.getElementById('MyDate').innerHTML = textDate;
                 
                 setTimeout(time_now, 1000);     
             }  
         </script>
         
-        <div>
-            <div id="nowTime" class="nowTime_datetime"></div>
-            <div id="nowTime2" class="nowTime_datetime"></div>
-            <br>
-            <div id="nowTime3" class="nowTime_datetime"></div>
+        <div class="center">
+            <div id="MyTime"></div>
+            <div id="MyDate"></div>
         </div>
     </body>
 </html>
