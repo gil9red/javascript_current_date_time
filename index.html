@@ -179,7 +179,16 @@
                     
                     calendar += "</tr>";
                 }
-                                
+
+                // <tr><td>Пн</td><td>Вт</td><td>Ср</td><td>Чт</td><td>Пт</td><td>Сб</td><td>Вс</td></tr>-->
+                var labelHeaders = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                var header = "<tr>";
+                for (var i in labelHeaders) {
+                    header += "<th>" + labelHeaders[i] + "</th>";
+                }
+                
+                header += "</tr>"
+                document.querySelector('#' + id + ' thead').innerHTML = header;
                 document.querySelector('#' + id + ' tbody').innerHTML = calendar;
             }
         
@@ -217,7 +226,7 @@
                 
                 Calendar("calendar", date);
                 
-                //setTimeout(time_now, 1000);     
+                setTimeout(time_now, 1000);     
             }  
         </script>
         
@@ -229,8 +238,6 @@
             <div id="MyCalendar">
                 <table id="calendar">
                     <thead>
-                        <tr><td>Mon</td><td>Tue</td><td>Wed</td><td>Thu</td><td>Fri</td><td>Sat</td><td>Sun</td></tr>
-                        <!--<tr><td>Пн</td><td>Вт</td><td>Ср</td><td>Чт</td><td>Пт</td><td>Сб</td><td>Вс</td></tr>-->
                     </thead>
                     <tbody>
                     </tbody>
