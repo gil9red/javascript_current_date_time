@@ -46,10 +46,28 @@
                 color: rgb(231, 140, 92);
             }
             
+            #calendar tbody td {
+                width: 20px;
+                height: 20px;
+            }
+            
+            /*
             #calendar tbody td.today {
                 background: rgb(220, 0, 0);
                 color: #fff;
             }
+            */
+            #calendar tbody td.today:before {
+                content: attr(data-char);
+                display: block;
+                background: rgb(67, 144, 226);
+                width: 20px;
+                height: 20px;
+                color: white;
+                border-radius: 50%;
+                margin: 0 auto;
+            }
+
             #calendar tbody td.other {
                 color: gray;
             }
@@ -155,18 +173,16 @@
                 
                 // Дни месяца
                 for (var i = 1; i <= Dlast; i++) {
-                    var td = "<td";
-                    
                     // Выделение текущего дня
                     if (i == date.getDate()) {
-                        td += ' class="today"'
+                        // Используя магию css рисуем круг на заднем фоне и текст в data-char
+                        calendar += '<td class="today" data-char="' + i + '"></td>';
+                        //calendar += '<td class="today">' + i + '</td>';
                     } else if (isHoliday(new Date(year, month, i))) {
-                        td += ' class="holiday"'
+                        calendar += '<td class="holiday">' + i + '</td>';
+                    } else {
+                        calendar += '<td>' + i + '</td>';
                     }
-                    
-                    td += ">" + i + '</td>';
-                    
-                    calendar += td;
                     
                     // Если день выпадает на воскресенье, то завершаем строку таблицы и начинаем следующую
                     if (new Date(D.getFullYear(), D.getMonth(), i).getDay() == 0) {
