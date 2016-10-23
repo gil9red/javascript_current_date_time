@@ -226,9 +226,19 @@
                 document.querySelector('#' + id + ' thead').innerHTML = header;
                 document.querySelector('#' + id + ' tbody').innerHTML = calendar;
             }
-        
+            
+            // NOTE: для тестирования дат
+            var mydate = new Date();
+            var TEST = true;
+            TEST = false;
+            
             function time_now() {
                 var date = new Date();
+                
+                if (TEST) {
+                    mydate.setDate(mydate.getDate() + 1);
+                    date = mydate;
+                }
                 // date = new Date(2016, 12, 01);
 
                 //var daysOfWeek = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
