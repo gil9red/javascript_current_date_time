@@ -24,7 +24,7 @@
             }
             
             
-            #calendar {
+            #calendar table {
                 width: 100%;
                 font: monospace;
                 line-height: 1.2em;
@@ -245,8 +245,13 @@
                 }
                 
                 header += "</tr>"
-                document.querySelector('#' + id + ' thead').innerHTML = header;
-                document.querySelector('#' + id + ' tbody').innerHTML = calendar;
+                
+                var table = '<table cellspacing="0">';
+                table += '<thead>' + header + '</thead>';
+                table += '<tbody>' + calendar + '</tbody>';
+                table += '</table>';
+                
+                document.querySelector('#' + id).innerHTML = table;
             }
             
             // NOTE: для тестирования дат
@@ -306,13 +311,7 @@
             
             <!-- cellspacing="0" убирает расстояние между ячейками, тогда линии под ячейками
             будут видны без разрывов -->
-            <table id="calendar" cellspacing="0">
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        
+            <div id="calendar"></div>
         </div>
     </body>
 </html>
