@@ -40,11 +40,24 @@
             }
             #calendar tbody td, thead th {
                 color: rgb(44, 86, 122);
+                /*color: black;*/
                 border-bottom: 1px solid black; /* Bottom line */
             }
+            
+            /*
             #calendar tbody td:nth-child(n+6), #calendar .holiday {
                 color: rgb(231, 140, 92);
             }
+            */
+            
+            /* Порядок важен, иначе текущий день для выходных будет окрашен белым */
+            #calendar tbody td.today {
+                color: white;
+            }
+            #calendar tbody td.dayoff, #calendar tbody td.holiday {
+                color: rgb(231, 140, 92);
+            }
+           
             
             #calendar tbody td {
                 width: 20px;
@@ -61,15 +74,15 @@
                 content: attr(data-char);
                 display: block;
                 background: rgb(67, 144, 226);
+                /*color: white;*/
                 width: 20px;
                 height: 20px;
-                color: white;
                 border-radius: 50%;
                 margin: 0 auto;
             }
 
             #calendar tbody td.other {
-                color: gray;
+                color: lightgray;
             }
             
         </style>
@@ -89,22 +102,13 @@
                 { "day": 8, "month": 0, },
                 
                 // День защитника Отечества
-                {
-                    "day": 23,
-                    "month": 1,
-                },
+                { "day": 23, "month": 1, },
                 
                 // Международный женский день
-                {
-                    "day": 8,
-                    "month": 2,
-                },
+                { "day": 8, "month": 2, },
                 
                 // День Победы
-                {
-                    "day": 9,
-                    "month": 4,
-                },
+                { "day": 9, "month": 4, },
             ];
         
             function isHoliday(date) {
@@ -173,15 +177,33 @@
                 
                 // Дни месяца
                 for (var i = 1; i <= Dlast; i++) {
+                    // Выходной день
+                    var newdate = new Date(year, month, i);
+                    var isDayoff = newdate.getDay() == 6 || newdate.getDay() == 0;
+                    
+                    var td_class = "";
+                    
                     // Выделение текущего дня
                     if (i == date.getDate()) {
+                        td_class = "today";
+                    }
+                    
+                    // Если суббота или воскресенье
+                    if (isDayoff) {
+                        td_class += " dayoff";
+                    }
+                    
+                    // Если праздник
+                    if (isHoliday(newdate)) {
+                        td_class += " holiday";
+                    }
+                    
+                    // TODO: refactoring
+                    if (i == date.getDate()) {
                         // Используя магию css рисуем круг на заднем фоне и текст в data-char
-                        calendar += '<td class="today" data-char="' + i + '"></td>';
-                        //calendar += '<td class="today">' + i + '</td>';
-                    } else if (isHoliday(new Date(year, month, i))) {
-                        calendar += '<td class="holiday">' + i + '</td>';
+                        calendar += '<td class="' + td_class + '" data-char="' + i + '"></td>';
                     } else {
-                        calendar += '<td>' + i + '</td>';
+                        calendar += '<td class="' + td_class + '" >' + i + '</td>';
                     }
                     
                     // Если день выпадает на воскресенье, то завершаем строку таблицы и начинаем следующую
@@ -239,7 +261,8 @@
                     mydate.setDate(mydate.getDate() + 1);
                     date = mydate;
                 }
-                // date = new Date(2016, 12, 01);
+                //date = new Date(2016, 12, 04);
+                //date = new Date(2016, 9, 29);
 
                 //var daysOfWeek = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
                 var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
